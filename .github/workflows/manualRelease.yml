@@ -15,15 +15,15 @@ jobs:
       packages: write
       deployments: write
     steps:
-    - uses: actions/checkout@v3
-    - name: Create Release Zip
-      run: |
-        zip -r release.zip . -x .gitignore .github/*
-    - uses: ncipollo/release-action@v1
-      with:
-        artifacts: "release.zip"
-        commit: release
-        tag: release
-        name: ${{ github.event.inputs.release_title }}
-        draft: false
-        prerelease: false
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Build
+        run: echo ${{ github.sha }} > Release.txt
+      - name: Test
+        run: cat Release.txt
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: ${{ github.event.inputs.release_title }}
+          tag_name: release
+          files: Release.txt
