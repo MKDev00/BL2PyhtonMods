@@ -11,6 +11,10 @@ on:
         description: 'Release name'
         required: true
         default: 'Manual Release'
+permissions:
+  actions: write
+  contents: write
+  packages: write
 
 jobs:
   package-and-release:
