@@ -155,7 +155,7 @@ class LootFilterMod(SDKMod):
                 self.ShowNotification("Loot Filter disabled!")
         
         if bind.Name == "Clear Loot":
-            if not self.FilterEnable:
+            if not self.FilterEnable.CurrentValue:
                 return
             self.RemoveLoot(self.GetValidLoot())
 
@@ -252,8 +252,7 @@ class LootFilterMod(SDKMod):
         bl2helper.ShowNotification(message, "Loot Filter Mod")
 
     def LogRemoval(self, LootList):
-        if not self.LoggingEnabled:
-            #unrealsdk.Log("Logging Disabled.")
+        if not self.LoggingEnabled.CurrentValue:
             return
         
         unrealsdk.Log("-----The following Items will be removed-----")
