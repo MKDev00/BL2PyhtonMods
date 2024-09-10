@@ -4,6 +4,14 @@ on:
   push:
     tags:
       - 'release'
+  workflow_dispatch:
+    inputs:
+      release-title:
+        description: 'Release title'
+        required: true
+      release-description:
+        description: 'Release description'
+        required: true
 
 jobs:
   release:
@@ -39,6 +47,7 @@ jobs:
           cp -r ./* release/ --exclude=.gitignore --exclude=.github/workflows
           zip -r release.zip release
           rm -rf release
+
       - name: Upload Release Asset
         uses: actions/upload-artifact@v2
         with:
