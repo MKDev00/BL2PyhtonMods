@@ -15,7 +15,7 @@ on:
 permissions:
   actions: write
   contents: write
-  releases: write
+  packages: write
 
 jobs:
   package-and-release:
