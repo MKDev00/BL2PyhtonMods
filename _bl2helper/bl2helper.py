@@ -2,6 +2,15 @@ import unrealsdk
 from unrealsdk import *
 from ..ModMenu import Hook
 
+class _bl2helper(unrealsdk.BL2MOD):
+    Name = "bl2helper"
+    Description = "Provides functionality for my other mods."
+    Author = "Majüs"
+    Version = "0.1"
+    Types = unrealsdk.ModTypes.Utility
+    Status = "Enabled"
+    SettingsInputs = {}
+
 def GetPlayerActor() -> unrealsdk.UObject:
     return unrealsdk.GetEngine().GamePlayers[0].Actor
 
@@ -41,3 +50,4 @@ def _IngameHook(self, caller: UObject, function: UFunction, params: FStruct) -> 
     return True
 
 IsInMainMenu : bool = None
+unrealsdk.RegisterMod(_bl2helper())
