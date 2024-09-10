@@ -1,4 +1,4 @@
-name: Manual Package Mods
+name: Manual Package and Release
 
 on:
   workflow_dispatch:
@@ -7,9 +7,13 @@ on:
         description: 'Output zip file name'
         required: true
         default: 'package'
+      release-name:
+        description: 'Release name'
+        required: true
+        default: 'Manual Release'
 
 jobs:
-  package:
+  package-and-release:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -17,11 +21,26 @@ jobs:
 
       - name: Package folders
         run: |
-          mkdir -p output
-          zip -r output/${{ github.event.inputs.output-file-name }}.zip . -x '.git*' '.gitignore'
+          zip -r ${GITHUB_WORKSPACE}/${{ github.event.inputs.output-file-name }}.zip . -x '.git*' '.gitignore'
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v3
+      - name: Create release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          name: ${{ github.event.inputs.output-file-name }}.zip
-          path: output/${{ github.event.inputs.output-file-name }}.zip
+          draft: false
+          prerelease: false
+          release_name: ${{ github.event.inputs.release-name }}
+          tag_name: ${{ github.event.inputs.release-name }}
+          body: 'Manual release created by GitHub Actions'
+
+      - name: Upload release asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ github.event.inputs.output-file-name }}.zip
+          asset_name: ${{ github.event.inputs.output-file-name }}.zip
+          asset_content_type: application/zip
