@@ -1,0 +1,9 @@
+# Ignore all files and directories
+/*
+!.gitignore
+settings.json
+__pycache__/
+
+# Un-ignore the specific directories
+!/LootFilterMod/
+!/_bl2helper/
