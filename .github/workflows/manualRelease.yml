@@ -1,0 +1,46 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'release'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_TITLE: ${{ github.event.inputs.release-title }}
+          RELEASE_NOTES: ${{ github.event.inputs.release-description }}
+          RELEASE_NAME: 'release'
+          TAG_NAME: 'release'
+          RELEASE_TYPE: 'published'
+          DRAFT: false
+          PRERELEASE: false
+
+      - name: Upload Release Asset
+        uses: actions/upload-artifact@v2
+        with:
+          name: release
+          path: ./
+
+      - name: Upload Release Asset excluding .gitignore and .github/workflows
+        run: |
+          mkdir release
+          cp -r ./* release/ --exclude=.gitignore --exclude=.github/workflows
+          zip -r release.zip release
+          rm -rf release
+      - name: Upload Release Asset
+        uses: actions/upload-artifact@v2
+        with:
+          name: release.zip
+          path: release.zip
