@@ -1,0 +1,32 @@
+name: Manual Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_title: 
+        description: 'Release title'
+        required: true
+      release_body: 
+        description: 'Release description'
+        required: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+      deployments: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Zip Folder
+        run: |
+          zip -r mods.zip . -x *.git* -x .github/* -x .gitignore
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: ${{ github.event.inputs.release_title }}
+          body: ${{ github.event.inputs.release_body }}
+          tag_name: "v${{ github.run_number }}"
+          files: mods.zip
