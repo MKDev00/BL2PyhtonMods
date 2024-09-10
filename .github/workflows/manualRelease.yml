@@ -19,3 +19,8 @@ jobs:
         with:
           title: ${{ github.event.inputs.release_title }}
           tag: release
+          assets: "release.zip"
+
+      - name: Create Release Zip
+        run: |
+          zip -r release.zip . -x .gitignore .github/*
