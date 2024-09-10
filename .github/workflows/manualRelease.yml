@@ -7,7 +7,7 @@ on:
         description: 'Release title'
         required: true
 
-permissions: wwrite-all
+permissions: write-all
 
 jobs:
   release:
