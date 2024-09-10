@@ -7,7 +7,7 @@ on:
         description: 'Release title'
         required: true
 
-permissions: write-all
+permissions: wwrite-all
 
 jobs:
   release:
@@ -26,7 +26,6 @@ jobs:
         id: create_release
         uses: actions/create-release@v1
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
           tag_name: 'release'
           release_name: ${{ github.event.inputs.release_title }}
           draft: false
