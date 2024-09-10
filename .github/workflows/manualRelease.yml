@@ -25,15 +25,14 @@ jobs:
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          RELEASE_TITLE: ${{ github.event.inputs.release-title }}
-          RELEASE_NOTES: ${{ github.event.inputs.release-description }}
-          RELEASE_NAME: 'release'
-          TAG_NAME: 'release'
-          RELEASE_TYPE: 'published'
-          DRAFT: false
-          PRERELEASE: false
+        with:
+          tag_name: 'release'
+          release_name: 'release'
+          draft: false
+          prerelease: false
+          title: ${{ github.event.inputs.release-title }}
+          body: ${{ github.event.inputs.release-description }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload Release Asset
         uses: actions/upload-artifact@v2
