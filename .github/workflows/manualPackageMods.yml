@@ -1,0 +1,27 @@
+name: Manual Package Mods
+
+on:
+  workflow_dispatch:
+    inputs:
+      output-file-name:
+        description: 'Output zip file name'
+        required: true
+        default: 'package'
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Package folders
+        run: |
+          mkdir -p output
+          zip -r output/${{ github.event.inputs.output-file-name }}.zip . -x '.git*' '.gitignore'
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ github.event.inputs.output-file-name }}.zip
+          path: output/${{ github.event.inputs.output-file-name }}.zip
